@@ -1,506 +1,776 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>my-store</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+    <title>NFT Marketplace</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-</head>
+    <style>
+      .card-hover {
+        transition: all 0.3s ease;
+      }
 
-<body bgcolor="#2b2b2b" text="#ffffff">
-    <nav class="py-4 px-8">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="#" class="text-white text-lg font-bold flex items-center gap-3 capitalize">
-                <i class="ri-store-2-line text-[#A259FF] text-3xl"></i>
-                <h1>NFT Marketplace</h1>
-            </a>
+      .card-hover:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(162, 89, 255, 0.3);
+      }
 
-            <div class="hidden md:flex">
-                <a href="#" class="text-gray-300 hover:text-white mx-2">Home</a>
-                <a href="#" class="text-gray-300 hover:text-white mx-2">Products</a>
-                <a href="#" class="text-gray-300 hover:text-white mx-2">Contact</a>
-            </div>
-            <i class="ri-menu-3-line md:hidden text-2xl"></i>
+      .button-hover {
+        transition: all 0.3s ease;
+      }
+
+      .button-hover:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 30px rgba(162, 89, 255, 0.4);
+      }
+
+      .nav-link {
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 50%;
+        background-color: #a259ff;
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      .category-card {
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .category-card:hover {
+        transform: scale(1.03);
+      }
+
+      .category-card:hover img {
+        transform: scale(1.1);
+        filter: blur(1px);
+      }
+
+      .creator-card {
+        transition: all 0.3s ease;
+      }
+
+      .creator-card:hover {
+        transform: translateX(10px);
+        border-left: 4px solid #a259ff;
+      }
+
+      .nft-card {
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .nft-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(162, 89, 255, 0.2),
+          transparent
+        );
+        transition: left 0.6s;
+      }
+
+      .nft-card:hover::before {
+        left: 100%;
+      }
+
+      .auction-timer {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      .gradient-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        transition: all 0.5s ease;
+      }
+
+      .gradient-card:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+      }
+    </style>
+  </head>
+
+  <body bgcolor="#2b2b2b" text="#ffffff">
+    <!-- navigation -->
+    <nav class="navigation py-4 px-4 md:px-8">
+      <div class="container mx-auto flex justify-between items-center">
+        <a
+          href="#"
+          class="text-white text-lg md:text-xl font-bold flex items-center gap-2 md:gap-3 capitalize"
+        >
+          <i class="ri-store-2-line text-[#A259FF] text-2xl md:text-3xl"></i>
+          <h1>NFT Marketplace</h1>
+        </a>
+
+        <div class="hidden md:flex space-x-6 lg:space-x-8">
+          <a href="#" class="nav-link text-gray-300 hover:text-white">Home</a>
+          <a href="#" class="nav-link text-gray-300 hover:text-white"
+            >Products</a
+          >
+          <a href="#" class="nav-link text-gray-300 hover:text-white"
+            >Rankings</a
+          >
+          <a href="#" class="nav-link text-gray-300 hover:text-white"
+            >Contact</a
+          >
         </div>
+        <i
+          class="ri-menu-3-line md:hidden text-2xl hover:text-[#A259FF] cursor-pointer"
+        ></i>
+      </div>
     </nav>
-    <div class="main p-10">
-        <div class="hero">
-            <div class="container mx-auto">
-                <h1 class="text-4xl font-bold text-white">
-                    Discover digital art & Collect NFTs
+
+    <div class="main px-4 md:px-8 lg:px-16">
+      <!-- Hero  -->
+      <div class="hero max-w-6xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          <div class="order-2 lg:order-1">
+            <h1
+              class="text-3xl md:text-4xl lg:text-6xl font-bold text-white leading-tight"
+            >
+              Discover digital art & Collect NFTs
+            </h1>
+
+            <p
+              class="text-lg md:text-xl text-gray-300 mt-4 lg:mt-6 leading-relaxed"
+            >
+              NFT marketplace UI created with Anima for Figma. Collect, buy and
+              sell art from more than 20k NFT artists.
+            </p>
+
+            <div class="mt-6 lg:mt-8">
+              <button
+                class="button-hover bg-[#A259FF] text-white py-3 md:py-4 px-6 md:px-8 rounded-full w-full md:w-auto text-lg md:text-xl font-semibold"
+              >
+                🚀 Get Started
+              </button>
+            </div>
+
+            <div
+              class="stats flex justify-between md:justify-start md:gap-12 lg:gap-16 mt-8 lg:mt-12"
+            >
+              <div class="text-center md:text-left">
+                <h1 class="text-xl md:text-2xl lg:text-3xl font-bold">240k+</h1>
+                <p class="text-sm md:text-base text-gray-300">Total Sales</p>
+              </div>
+              <div class="text-center md:text-left">
+                <h1 class="text-xl md:text-2xl lg:text-3xl font-bold">100k+</h1>
+                <p class="text-sm md:text-base text-gray-300">Auctions</p>
+              </div>
+              <div class="text-center md:text-left">
+                <h1 class="text-xl md:text-2xl lg:text-3xl font-bold">240k+</h1>
+                <p class="text-sm md:text-base text-gray-300">Artists</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-1 lg:order-2">
+            <div class="card-hover bg-[#3b3b3b] rounded-2xl overflow-hidden">
+              <img
+                class="w-full h-64 md:h-80 lg:h-96 object-cover"
+                src="https://nft-market-as3s.vercel.app/static/media/Image%20Placeholder.51fc41d14a4228b725cb.png"
+                alt="Space Walking NFT"
+              />
+              <div class="p-4 lg:p-6">
+                <h1 class="text-white text-xl lg:text-2xl font-bold">
+                  Space Walking
                 </h1>
+                <div class="flex items-center gap-3 mt-2">
+                  <img
+                    class="h-6 w-6 rounded-full object-cover"
+                    src="https://pbs.twimg.com/profile_images/1953008536977391616/P3i3v36-_400x400.jpg"
+                    alt="Animakid"
+                  />
+                  <p class="text-gray-300">Animakid</p>
+                </div>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
 
-            <div class="dis py-5">
-                <p class="text-1xl text-gray-300">
-                    NFT marketplace UI created with Anima for Figma. Collect, buy and
-                    sell art from more than 20k NFT artists.
-                </p>
-            </div>
-
-            <div class="card bg-[#3b3b3b] h-auto full-wight rounded-2xl">
-                <div class="">
-                    <img class="w-full object-cover"
-                        src="https://nft-market-as3s.vercel.app/static/media/Image%20Placeholder.51fc41d14a4228b725cb.png"
-                        alt="" />
-                </div>
-                <div class="px-5 py-3">
-                    <div>
-                        <h1 class="text-white text-2xl font-bold">Space Walking</h1>
-                    </div>
-                    <div class="flex items-center gap-3 mt-2">
-                        <img class="h-6 rounded-full"
-                            src="https://pbs.twimg.com/profile_images/1953008536977391616/P3i3v36-_400x400.jpg"
-                            alt="" />
-                        <p class="text-1xl text-gray-300">Animakid</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="btn mt-10">
-                <button class="bg-[#A259FF] text-white py-2 px-4 rounded-4xl w-full h-20 text-2xl">
-                    🚀 &nbsp;&nbsp; Get Started
-                </button>
-            </div>
-
-            <div class="stats flex justify-between mt-10 p-5">
-                <div class="">
-                    <h1 class="text-2xl capitalize">240k+</h1>
-                    <p class="text-lg capitalize">total sales</p>
-                </div>
-                <div class="">
-                    <h1 class="text-2xl capitalize">100k+</h1>
-                    <p class="text-lg capitalize">auction</p>
-                </div>
-                <div class="">
-                    <h1 class="text-2xl capitalize">240k</h1>
-                    <p class="text-lg capitalize">artists</p>
-                </div>
-            </div>
+      <!-- Trending Collection -->
+      <div class="page2 max-w-6xl mx-auto mt-16 lg:mt-24">
+        <div class="text-center lg:text-left">
+          <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+            Trending Collection
+          </h1>
+          <p class="text-lg md:text-xl text-gray-300 mt-4 tracking-wide">
+            Checkout our weekly updated trending collection.
+          </p>
         </div>
 
-        <div class="page2">
-            <div class="container mx-auto mt-25">
-                <h1 class="text-4xl font-bold text-white">Trending Collection</h1>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-8">
+          <div
+            class="card-hover nft-card bg-[#3b3b3b] rounded-2xl overflow-hidden"
+          >
+            <div class="p-4">
+              <img
+                class="w-full h-48 md:h-56 object-cover rounded-xl"
+                src="https://nft-marketplace-mu-seven.vercel.app/img/collections/Animals-01.png"
+                alt="DSGN Animals"
+              />
             </div>
 
-            <div class="dis py-5">
-                <p class="text-xl text-gray-300 tracking-wide">
-                    Checkout our weekly updated trending collection.
-                </p>
+            <div class="flex justify-center gap-2 px-4">
+              <img
+                src="https://nft-marketplace-mu-seven.vercel.app/img/collections/Animals-02.png"
+                alt="Animal 2"
+                class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-xl"
+              />
+              <img
+                src="https://nft-marketplace-mu-seven.vercel.app/img/collections/Animals-03.png"
+                alt="Animal 3"
+                class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-xl"
+              />
+              <div
+                class="bg-[#A259FF] rounded-xl w-16 h-16 md:w-20 md:h-20 flex items-center justify-center"
+              >
+                <h1 class="text-white text-sm font-bold">1025+</h1>
+              </div>
             </div>
 
-            <div class="card mt-10 bg-[#3b3b3b] h-auto full-wight rounded-2xl">
-                <div class="w-full object-cover p-5">
-                    <img class="" src="https://nft-marketplace-mu-seven.vercel.app/img/collections/Animals-01.png"
-                        alt="" />
-                </div>
-
-                <div class="flex justify-evenly gap-2 px-5">
-                    <div class="rounded-2xl p-1">
-                        <img src="https://nft-marketplace-mu-seven.vercel.app/img/collections/Animals-02.png" alt=""
-                            class="w-20 h-20 object-cover rounded-xl" />
-                    </div>
-                    <div class="rounded-2xl p-1">
-                        <img src="https://nft-marketplace-mu-seven.vercel.app/img/collections/Animals-03.png" alt=""
-                            class="w-20 h-20 object-cover rounded-xl" />
-                    </div>
-                    <div class="bg-[#A259FF] rounded-2xl mt-1 w-19 h-19 flex items-center justify-center">
-                        <h1 class="text-white text-center font-bold">1025+</h1>
-                    </div>
-                </div>
-
-                <div class="px-5 py-3">
-                    <div>
-                        <h1 class="text-white text-2xl font-bold">DSGN Animals</h1>
-                    </div>
-                    <div class="flex items-center gap-3 mt-2">
-                        <img class="h-6 rounded-full"
-                            src="https://pbs.twimg.com/profile_images/1953008536977391616/P3i3v36-_400x400.jpg"
-                            alt="" />
-                        <p class="text-1xl text-gray-300">MrFox</p>
-                    </div>
-                </div>
+            <div class="p-4">
+              <h1 class="text-white text-xl lg:text-2xl font-bold">
+                DSGN Animals
+              </h1>
+              <div class="flex items-center gap-3 mt-2">
+                <img
+                  class="h-6 w-6 rounded-full object-cover"
+                  src="https://pbs.twimg.com/profile_images/1953008536977391616/P3i3v36-_400x400.jpg"
+                  alt="MrFox"
+                />
+                <p class="text-gray-300">MrFox</p>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Creators -->
+      <div class="creators max-w-6xl mx-auto mt-16 lg:mt-24">
+        <div class="text-center lg:text-left">
+          <h1
+            class="text-3xl md:text-4xl lg:text-5xl font-bold text-white uppercase"
+          >
+            Top Creators
+          </h1>
+          <p class="text-lg md:text-xl text-gray-300 mt-4 capitalize">
+            Checkout Top Rated Creators on the NFT Marketplace
+          </p>
         </div>
 
-        <div class="creators">
-            <div class="container mx-auto uppercase mt-25">
-                <h1 class="text-4xl font-bold text-white">Top creators</h1>
-            </div>
-            <div class="dis py-5 capitalize">
-                <p class="text-1xl text-gray-300">
-                    Checkout Top Rated Creators on the NFT Marketplace
-                </p>
-            </div>
-
-            <div class="card bg-[#3b3b3b] h-auto full-wight rounded-2xl flex gap-6 items-center mt-5 mb-5 px-6 py-2">
-                <div class="h-20 w-20 rounded-full bg-white">
-                    <img class="object-cover h-20 w-20 rounded-full"
-                        src="https://images.unsplash.com/photo-1659141632957-a2cd74b8a446?q=80&w=678&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="" />
-                </div>
-
-                <div>
-                    <h1 class="text-2xl font-bold">Keepitreal</h1>
-                    <p class="text-gray-300">
-                        Total Sales:<span class="text-white text-1xl">
-                            &nbsp; 34.53 ETH</span>
-                    </p>
-                </div>
-            </div>
-
-            <div class="card bg-[#3b3b3b] h-auto full-wight rounded-2xl flex gap-6 items-center mt-5 mb-5 px-6 py-2">
-                <div class="h-20 w-20 rounded-full bg-white">
-                    <img class="object-cover h-20 w-20 rounded-full"
-                        src="https://images.unsplash.com/photo-1691316749874-e89297ee4cf3?q=80&w=714&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="" />
-                </div>
-
-                <div>
-                    <h1 class="text-2xl font-bold">DigiLab</h1>
-                    <p class="text-gray-300">
-                        Total Sales:<span class="text-white text-1xl">
-                            &nbsp; 32.57 ETH</span>
-                    </p>
-                </div>
-            </div>
-
-            <div class="card bg-[#3b3b3b] h-auto full-wight rounded-2xl flex gap-6 items-center mt-5 mb-5 px-6 py-2">
-                <div class="h-20 w-20 rounded-full bg-white">
-                    <img class="object-cover h-20 w-20 rounded-full"
-                        src="https://images.unsplash.com/photo-1671783419534-5a89ac4b44a6?q=80&w=715&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="" />
-                </div>
-
-                <div>
-                    <h1 class="text-2xl font-bold">GravityOne</h1>
-                    <p class="text-gray-300">
-                        Total Sales:<span class="text-white text-1xl">
-                            &nbsp; 29.90 ETH</span>
-                    </p>
-                </div>
-            </div>
-
-            <div class="card bg-[#3b3b3b] h-auto full-wight rounded-2xl flex gap-6 items-center mt-5 mb-5 px-6 py-2">
-                <div class="h-20 w-20 rounded-full bg-white">
-                    <img class="object-cover h-20 w-20 rounded-full"
-                        src="https://images.unsplash.com/photo-1680447079006-f04c5c8bb087?q=80&w=715&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="" />
-                </div>
-
-                <div>
-                    <h1 class="text-2xl font-bold">Juanie</h1>
-                    <p class="text-gray-300">
-                        Total Sales:<span class="text-white text-1xl">
-                            &nbsp; 25.13 ETH</span>
-                    </p>
-                </div>
-            </div>
-
-            <div class="card bg-[#3b3b3b] h-auto full-wight rounded-2xl flex gap-6 items-center mt-5 mb-8 px-6 py-2">
-                <div class="h-20 w-20 rounded-full bg-white">
-                    <img class="object-cover h-20 w-20 rounded-full"
-                        src="https://images.unsplash.com/photo-1696960252831-7580e1bcbee4?q=80&w=696&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="" />
-                </div>
-
-                <div>
-                    <h1 class="text-2xl font-bold">BlueWhale</h1>
-                    <p class="text-gray-300">
-                        Total Sales:<span class="text-white text-1xl">
-                            &nbsp; 22.53 ETH</span>
-                    </p>
-                </div>
-            </div>
-
-            <div class="btn mt-10">
-                <button class="border 2px border-[#A259FF]  text-white py-2 px-2 rounded-4xl w-full h-18 text-2xl">🚀
-                    &nbsp;&nbsp; View Rankings</button>
-            </div>
-        </div>
-
-        <div class="page3 ">
-            <div class="container mx-auto uppercase mt-25">
-                <h1 class="text-3xl font-bold text-white">Browse Categories</h1>
-
-            </div>
-
-            <div class="cards flex gap-6 mt-10 mb-10">
-                <div class="card bg-[#3b3b3b] h-55 w-1/2 rounded-2xl ">
-                    <div class="relative"><img class="object-cover rounded-2xl p-1  blur-[2px] relative"
-                            src="https://nft-marketplace-mu-seven.vercel.app/img/categories/Art.png" alt="">
-                        <i
-                            class="ri-brush-ai-line text-white text-6xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-50"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-white text-center">Art</h1>
-                    </div>
-                </div>
-
-                <div class="card bg-[#3b3b3b] h-55 w-1/2 rounded-2xl ">
-                    <div class="relative"><img class="object-cover rounded-2xl p-1  blur-[2px] relative"
-                            src="https://fitb-nft.netlify.app/assets/category_icon2.png" alt="">
-                        <!-- <i class="ri-brush-ai-line text-white text-3xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>     -->
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-white text-center">Collectibles</h1>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="cards flex gap-6 mt-10 mb-10">
-                <div class="card bg-[#3b3b3b] h-55 w-1/2 rounded-2xl ">
-                    <div class="relative"><img class="object-cover rounded-2xl p-1  blur-[2px] relative"
-                            src="https://fitb-nft.netlify.app/assets/category_icon3.png" alt="">
-                        <!-- <i class="ri-brush-ai-line text-white text-6xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i> -->
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-white text-center">Music
-
-                        </h1>
-                    </div>
-                </div>
-
-                <div class="card bg-[#3b3b3b] h-55 w-1/2 rounded-2xl ">
-                    <div class="relative"><img class="object-cover rounded-2xl p-1  blur-[2px] relative"
-                            src="https://fitb-nft.netlify.app/assets/category_icon4.png" alt="">
-                        <!-- <i class="ri-brush-ai-line text-white text-3xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>   -->
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-white text-center">Photography</h1>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="cards flex gap-6 mt-10 mb-10">
-                <div class="card bg-[#3b3b3b] h-55 w-1/2 rounded-2xl ">
-                    <div class="relative"><img class="object-cover rounded-2xl p-1  blur-[2px] relative"
-                            src="https://fitb-nft.netlify.app/assets/category_icon5.png" alt="">
-                        <!-- <i class="ri-brush-ai-line text-white text-6xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i> -->
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-white text-center">Video
-
-                        </h1>
-                    </div>
-                </div>
-
-                <div class="card bg-[#3b3b3b] h-55 w-1/2 rounded-2xl ">
-                    <div class="relative"><img class="object-cover rounded-2xl p-1  blur-[2px] relative"
-                            src="https://fitb-nft.netlify.app/assets/category_icon6.png" alt="">
-
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-white text-center">Utility
-
-                        </h1>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="cards flex gap-6 mt-10 mb-10">
-                <div class="card bg-[#3b3b3b] h-55 w-1/2 rounded-2xl ">
-                    <div class="relative"><img class="object-cover rounded-2xl p-1  blur-[2px] relative"
-                            src="https://fitb-nft.netlify.app/assets/category_icon7.png" alt="">
-
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-white text-center">Sport
-
-                        </h1>
-                    </div>
-                </div>
-
-                <div class="card bg-[#3b3b3b] h-55 w-1/2 rounded-2xl ">
-                    <div class="relative"><img class="object-cover rounded-2xl p-1  blur-[2px] relative"
-                            src="https://fitb-nft.netlify.app/assets/category_icon8.png" alt="">
-
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-white text-center">Virtual Words
-
-                        </h1>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="page4">
-            <div class="container mx-auto uppercase mt-25">
-                <h1 class="text-3xl font-bold text-white">Discover More NFTs</h1>
-
-            </div>
-
-            <div class="dis py-5">
-                <p class="text-xl text-gray-300 tracking-wide">
-                    Explore new trending NFTs
-                </p>
-            </div>
-
-            <div class="card mt-10 bg-[#3b3b3b] h-auto full-wight rounded-2xl">
-                <div class="w-full object-cover p-5">
-                    <img class="" src="https://fitb-nft.netlify.app/assets/artist_icon1.png" alt="" />
-                </div>
-
-
-
-                <div class="px-5 py-3">
-                    <div>
-                        <h1 class="text-white text-2xl font-bold">Distant Galaxy</h1>
-                    </div>
-                    <div class="flex items-center gap-3 mt-2">
-                        <img class="h-6 rounded-full" src="https://fitb-nft.netlify.app/assets/artist_mini_icon1.svg"
-                            alt="" />
-                        <p class="text-1xl text-gray-300">Moon Dancer</p>
-                    </div>
-                </div>
-
-                <div class="flex justify-between px-8">
-                    <h1 class="text-gray-300">Price</h1>
-                    <h1 class="text-gray-300">Highest Bid</h1>
-                </div>
-
-                <div class="flex justify-between px-8 pb-5">
-                    <p class="text-white font-bold">1.05 ETH</p>
-                    <p class="text-white font-bold">.33 ETH</p>
-                </div>
-            </div>
-
-
-            <div class="card mt-10 bg-[#3b3b3b] h-auto full-wight rounded-2xl">
-                <div class="w-full object-cover p-5">
-                    <img class="" src="https://fitb-nft.netlify.app/assets/artist_icon2.png" alt="" />
-                </div>
-
-
-
-                <div class="px-5 py-3">
-                    <div>
-                        <h1 class="text-white text-2xl font-bold">Life on Edena
-                        </h1>
-                    </div>
-                    <div class="flex items-center gap-3 mt-2">
-                        <img class="h-6 rounded-full" src="https://fitb-nft.netlify.app/assets/artist_mini_icon1.svg"
-                            alt="" />
-                        <p class="text-1xl text-gray-300">NebulaKid
-
-                        </p>
-                    </div>
-                </div>
-
-                <div class="flex justify-between px-8">
-                    <h1 class="text-gray-300">Price</h1>
-                    <h1 class="text-gray-300">Highest Bid</h1>
-                </div>
-
-                <div class="flex justify-between px-8 pb-5">
-                    <p class="text-white font-bold">1.05 ETH</p>
-                    <p class="text-white font-bold">.33 ETH</p>
-                </div>
-            </div>
-
-            <div class="card mt-10 bg-[#3b3b3b] h-auto full-wight rounded-2xl">
-                <div class="w-full object-cover p-5">
-                    <img class="" src="https://fitb-nft.netlify.app/assets/artist_icon3.png" alt="" />
-                </div>
-
-
-
-                <div class="px-5 py-3">
-                    <div>
-                        <h1 class="text-white text-2xl font-bold">AstroFiction
-
-                        </h1>
-                    </div>
-                    <div class="flex items-center gap-3 mt-2">
-                        <img class="h-6 rounded-full" src="https://fitb-nft.netlify.app/assets/artist_mini_icon1.svg"
-                            alt="" />
-                        <p class="text-1xl text-gray-300">Spaceone
-
-
-
-                        </p>
-                    </div>
-                </div>
-
-                <div class="flex justify-between px-8">
-                    <h1 class="text-gray-300">Price</h1>
-                    <h1 class="text-gray-300">Highest Bid</h1>
-                </div>
-
-                <div class="flex justify-between px-8 pb-5">
-                    <p class="text-white font-bold">1.05 ETH</p>
-                    <p class="text-white font-bold">.33 ETH</p>
-                </div>
-            </div>
-
-            <div class="btn mt-10">
-                <button class="border 2px border-[#A259FF]  text-white py-2 px-2 rounded-4xl w-full h-18 text-2xl">👁️
-                    &nbsp;&nbsp; See All</button>
-            </div>
-        </div>
-
-        <div class="page5 w-full mt-10 mb-10 relative">
+        <div class="grid md:grid-cols-2 gap-4 lg:gap-6 mt-8">
+          <div
+            class="creator-card bg-[#3b3b3b] rounded-2xl flex gap-4 lg:gap-6 items-center p-4 lg:p-6"
+          >
             <div
-                class="h-[90vh] w-full bg-[url('https://fitb-nft.netlify.app/assets/mushroom_image.png')] bg-cover bg-center blur-sm">
+              class="h-16 w-16 lg:h-20 lg:w-20 rounded-full overflow-hidden flex-shrink-0"
+            >
+              <img
+                class="object-cover h-full w-full"
+                src="https://images.unsplash.com/photo-1659141632957-a2cd74b8a446?q=80&w=678&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                alt="Keepitreal"
+              />
             </div>
-            <div class="">
-                <div
-                    class="card flex  items-center bg-[#3b3b3b] px-10 py-5 gap-5 rounded-full absolute top-[20%] left-1/3 transform -translate-x-1/2 -translate-y-1/2">
-                    <img src="https://fitb-nft.netlify.app/assets/avatar2.svg" alt="">
-                    <h1>Shroomie</h1>
-                </div>
-
-
-            </div>
-            <div
-                class="card flex  items-center ml-10 absolute top-[35%] left-1/3 transform -translate-x-1/2 -translate-y-1/2">
-                <h1 class="text-5xl font-bold ">Magic Mushrooms</h1>
-            </div>
-
             <div>
-                <div
-                    class="bg-[rgba(255,255,255,0.3)] mt-20 text-white w-80 p-10 mt-10 rounded-4xl text-2xl absolute top-[50%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <h1>Auction ends in:</h1>
-                    <div class="flex ">
-                        <div>
-                            <h1 class="text-4xl font-bold flex flex-row mt-5">59 &nbsp; :</h1>
-                            <p class="text-sm mt-2">Hours</p>
-                        </div>
-                        <div>
-                            <h1 class="text-4xl font-bold flex flex-row mt-5">59 &nbsp; :</h1>
-                            <p class="text-sm mt-2">Minutes</p>
-                        </div>
-                        <div>
-                            <h1 class="text-4xl font-bold flex flex-row mt-5">59</h1>
-                            <p class="text-sm mt-2">Seconds</p>
-                        </div>
-                    </div>
-                </div>
-
-
-
+              <h1 class="text-xl lg:text-2xl font-bold">Keepitreal</h1>
+              <p class="text-gray-300 text-sm lg:text-base">
+                Total Sales:
+                <span class="text-white font-semibold">34.53 ETH</span>
+              </p>
             </div>
+          </div>
 
-              <div class="btn mt-10 w-80   rounded-full  absolute top-[80%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <button
-                        class="border 2px border-[#A259FF]  bg-[rgba(255,255,255,0.2)] text-white py-2 px-2 rounded-4xl w-full h-18 text-2xl ">👁️
-                        &nbsp;&nbsp; See NFT</button>
-                </div>
+          <div
+            class="creator-card bg-[#3b3b3b] rounded-2xl flex gap-4 lg:gap-6 items-center p-4 lg:p-6"
+          >
+            <div
+              class="h-16 w-16 lg:h-20 lg:w-20 rounded-full overflow-hidden flex-shrink-0"
+            >
+              <img
+                class="object-cover h-full w-full"
+                src="https://images.unsplash.com/photo-1691316749874-e89297ee4cf3?q=80&w=714&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                alt="DigiLab"
+              />
+            </div>
+            <div>
+              <h1 class="text-xl lg:text-2xl font-bold">DigiLab</h1>
+              <p class="text-gray-300 text-sm lg:text-base">
+                Total Sales:
+                <span class="text-white font-semibold">32.57 ETH</span>
+              </p>
+            </div>
+          </div>
 
+          <div
+            class="creator-card bg-[#3b3b3b] rounded-2xl flex gap-4 lg:gap-6 items-center p-4 lg:p-6"
+          >
+            <div
+              class="h-16 w-16 lg:h-20 lg:w-20 rounded-full overflow-hidden flex-shrink-0"
+            >
+              <img
+                class="object-cover h-full w-full"
+                src="https://images.unsplash.com/photo-1671783419534-5a89ac4b44a6?q=80&w=715&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                alt="GravityOne"
+              />
+            </div>
+            <div>
+              <h1 class="text-xl lg:text-2xl font-bold">GravityOne</h1>
+              <p class="text-gray-300 text-sm lg:text-base">
+                Total Sales:
+                <span class="text-white font-semibold">29.90 ETH</span>
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="creator-card bg-[#3b3b3b] rounded-2xl flex gap-4 lg:gap-6 items-center p-4 lg:p-6"
+          >
+            <div
+              class="h-16 w-16 lg:h-20 lg:w-20 rounded-full overflow-hidden flex-shrink-0"
+            >
+              <img
+                class="object-cover h-full w-full"
+                src="https://images.unsplash.com/photo-1680447079006-f04c5c8bb087?q=80&w=715&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                alt="Juanie"
+              />
+            </div>
+            <div>
+              <h1 class="text-xl lg:text-2xl font-bold">Juanie</h1>
+              <p class="text-gray-300 text-sm lg:text-base">
+                Total Sales:
+                <span class="text-white font-semibold">25.13 ETH</span>
+              </p>
+            </div>
+          </div>
         </div>
 
-        
-    </div>
-</body>
+        <div class="mt-8">
+          <button
+            class="button-hover border-2 border-[#A259FF] text-white py-3 px-8 rounded-full w-full md:w-auto text-lg font-semibold hover:bg-[#A259FF] transition-all"
+          >
+            🚀 View Rankings
+          </button>
+        </div>
+      </div>
 
+      <!-- Browse Categories -->
+      <div class="page3 max-w-6xl mx-auto mt-16 lg:mt-24">
+        <div class="text-center lg:text-left">
+          <h1
+            class="text-3xl md:text-4xl lg:text-5xl font-bold text-white uppercase"
+          >
+            Browse Categories
+          </h1>
+        </div>
+
+        <div
+          class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6 mt-8"
+        >
+          <div class="category-card bg-[#3b3b3b] rounded-2xl overflow-hidden">
+            <div class="relative h-32 md:h-40 lg:h-48">
+              <img
+                class="w-full h-full object-cover blur-sm transition-all duration-300"
+                src="https://nft-marketplace-mu-seven.vercel.app/img/categories/Art.png"
+                alt="Art"
+              />
+              <i
+                class="ri-brush-ai-line text-white text-4xl lg:text-6xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+              ></i>
+            </div>
+            <div class="p-3 lg:p-4">
+              <h1 class="text-lg lg:text-xl font-bold text-white text-center">
+                Art
+              </h1>
+            </div>
+          </div>
+
+          <div class="category-card bg-[#3b3b3b] rounded-2xl overflow-hidden">
+            <div class="relative h-32 md:h-40 lg:h-48">
+              <img
+                class="w-full h-full object-cover blur-sm transition-all duration-300"
+                src="https://fitb-nft.netlify.app/assets/category_icon2.png"
+                alt="Collectibles"
+              />
+            </div>
+            <div class="p-3 lg:p-4">
+              <h1 class="text-lg lg:text-xl font-bold text-white text-center">
+                Collectibles
+              </h1>
+            </div>
+          </div>
+
+          <div class="category-card bg-[#3b3b3b] rounded-2xl overflow-hidden">
+            <div class="relative h-32 md:h-40 lg:h-48">
+              <img
+                class="w-full h-full object-cover blur-sm transition-all duration-300"
+                src="https://fitb-nft.netlify.app/assets/category_icon3.png"
+                alt="Music"
+              />
+            </div>
+            <div class="p-3 lg:p-4">
+              <h1 class="text-lg lg:text-xl font-bold text-white text-center">
+                Music
+              </h1>
+            </div>
+          </div>
+
+          <div class="category-card bg-[#3b3b3b] rounded-2xl overflow-hidden">
+            <div class="relative h-32 md:h-40 lg:h-48">
+              <img
+                class="w-full h-full object-cover blur-sm transition-all duration-300"
+                src="https://fitb-nft.netlify.app/assets/category_icon4.png"
+                alt="Photography"
+              />
+            </div>
+            <div class="p-3 lg:p-4">
+              <h1 class="text-lg lg:text-xl font-bold text-white text-center">
+                Photography
+              </h1>
+            </div>
+          </div>
+
+          <div class="category-card bg-[#3b3b3b] rounded-2xl overflow-hidden">
+            <div class="relative h-32 md:h-40 lg:h-48">
+              <img
+                class="w-full h-full object-cover blur-sm transition-all duration-300"
+                src="https://fitb-nft.netlify.app/assets/category_icon5.png"
+                alt="Video"
+              />
+            </div>
+            <div class="p-3 lg:p-4">
+              <h1 class="text-lg lg:text-xl font-bold text-white text-center">
+                Video
+              </h1>
+            </div>
+          </div>
+
+          <div class="category-card bg-[#3b3b3b] rounded-2xl overflow-hidden">
+            <div class="relative h-32 md:h-40 lg:h-48">
+              <img
+                class="w-full h-full object-cover blur-sm transition-all duration-300"
+                src="https://fitb-nft.netlify.app/assets/category_icon6.png"
+                alt="Utility"
+              />
+            </div>
+            <div class="p-3 lg:p-4">
+              <h1 class="text-lg lg:text-xl font-bold text-white text-center">
+                Utility
+              </h1>
+            </div>
+          </div>
+
+          <div class="category-card bg-[#3b3b3b] rounded-2xl overflow-hidden">
+            <div class="relative h-32 md:h-40 lg:h-48">
+              <img
+                class="w-full h-full object-cover blur-sm transition-all duration-300"
+                src="https://fitb-nft.netlify.app/assets/category_icon7.png"
+                alt="Sport"
+              />
+            </div>
+            <div class="p-3 lg:p-4">
+              <h1 class="text-lg lg:text-xl font-bold text-white text-center">
+                Sport
+              </h1>
+            </div>
+          </div>
+
+          <div class="category-card bg-[#3b3b3b] rounded-2xl overflow-hidden">
+            <div class="relative h-32 md:h-40 lg:h-48">
+              <img
+                class="w-full h-full object-cover blur-sm transition-all duration-300"
+                src="https://fitb-nft.netlify.app/assets/category_icon8.png"
+                alt="Virtual Worlds"
+              />
+            </div>
+            <div class="p-3 lg:p-4">
+              <h1 class="text-lg lg:text-xl font-bold text-white text-center">
+                Virtual Worlds
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Discover More NFTs -->
+      <div class="page4 max-w-6xl mx-auto mt-16 lg:mt-24">
+        <div class="text-center lg:text-left">
+          <h1
+            class="text-3xl md:text-4xl lg:text-5xl font-bold text-white uppercase"
+          >
+            Discover More NFTs
+          </h1>
+          <p class="text-lg md:text-xl text-gray-300 mt-4 tracking-wide">
+            Explore new trending NFTs
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-8">
+          <div
+            class="card-hover nft-card bg-[#3b3b3b] rounded-2xl overflow-hidden"
+          >
+            <div class="p-4">
+              <img
+                class="w-full h-48 md:h-56 object-cover rounded-xl"
+                src="https://fitb-nft.netlify.app/assets/artist_icon1.png"
+                alt="Distant Galaxy"
+              />
+            </div>
+            <div class="p-4">
+              <h1 class="text-white text-xl lg:text-2xl font-bold">
+                Distant Galaxy
+              </h1>
+              <div class="flex items-center gap-3 mt-2">
+                <img
+                  class="h-6 w-6 rounded-full"
+                  src="https://fitb-nft.netlify.app/assets/artist_mini_icon1.svg"
+                  alt="Moon Dancer"
+                />
+                <p class="text-gray-300">Moon Dancer</p>
+              </div>
+              <div class="flex justify-between mt-4">
+                <div>
+                  <h1 class="text-gray-300 text-sm">Price</h1>
+                  <p class="text-white font-bold">1.05 ETH</p>
+                </div>
+                <div>
+                  <h1 class="text-gray-300 text-sm">Highest Bid</h1>
+                  <p class="text-white font-bold">0.33 ETH</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="card-hover nft-card bg-[#3b3b3b] rounded-2xl overflow-hidden"
+          >
+            <div class="p-4">
+              <img
+                class="w-full h-48 md:h-56 object-cover rounded-xl"
+                src="https://fitb-nft.netlify.app/assets/artist_icon2.png"
+                alt="Life on Edena"
+              />
+            </div>
+            <div class="p-4">
+              <h1 class="text-white text-xl lg:text-2xl font-bold">
+                Life on Edena
+              </h1>
+              <div class="flex items-center gap-3 mt-2">
+                <img
+                  class="h-6 w-6 rounded-full"
+                  src="https://fitb-nft.netlify.app/assets/artist_mini_icon1.svg"
+                  alt="NebulaKid"
+                />
+                <p class="text-gray-300">NebulaKid</p>
+              </div>
+              <div class="flex justify-between mt-4">
+                <div>
+                  <h1 class="text-gray-300 text-sm">Price</h1>
+                  <p class="text-white font-bold">1.05 ETH</p>
+                </div>
+                <div>
+                  <h1 class="text-gray-300 text-sm">Highest Bid</h1>
+                  <p class="text-white font-bold">0.33 ETH</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="card-hover nft-card bg-[#3b3b3b] rounded-2xl overflow-hidden"
+          >
+            <div class="p-4">
+              <img
+                class="w-full h-48 md:h-56 object-cover rounded-xl"
+                src="https://fitb-nft.netlify.app/assets/artist_icon3.png"
+                alt="AstroFiction"
+              />
+            </div>
+            <div class="p-4">
+              <h1 class="text-white text-xl lg:text-2xl font-bold">
+                AstroFiction
+              </h1>
+              <div class="flex items-center gap-3 mt-2">
+                <img
+                  class="h-6 w-6 rounded-full"
+                  src="https://fitb-nft.netlify.app/assets/artist_mini_icon1.svg"
+                  alt="Spaceone"
+                />
+                <p class="text-gray-300">Spaceone</p>
+              </div>
+              <div class="flex justify-between mt-4">
+                <div>
+                  <h1 class="text-gray-300 text-sm">Price</h1>
+                  <p class="text-white font-bold">1.05 ETH</p>
+                </div>
+                <div>
+                  <h1 class="text-gray-300 text-sm">Highest Bid</h1>
+                  <p class="text-white font-bold">0.33 ETH</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 text-center">
+          <button
+            class="button-hover border-2 border-[#A259FF] text-white py-3 px-8 rounded-full w-full md:w-auto text-lg font-semibold hover:bg-[#A259FF] transition-all"
+          >
+            👁️ See All
+          </button>
+        </div>
+      </div>
+
+      <!-- How It Works -->
+      <div class="page6 max-w-6xl mx-auto mt-16 lg:mt-24">
+        <div class="text-center lg:text-left mb-10">
+          <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+            How It Works
+          </h1>
+          <p class="text-lg md:text-xl text-gray-300 mt-3">
+            Find out how to get started
+          </p>
+        </div>
+
+        <!-- Steps -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          <!-- Step 1 -->
+          <div class="card-hover bg-[#3b3b3b] rounded-2xl p-6 text-center">
+            <div class="flex justify-center mb-4">
+              <img
+                src="https://img.icons8.com/fluency/96/wallet.png"
+                alt="Wallet"
+                class="h-20 w-20"
+              />
+            </div>
+            <h2 class="text-xl font-bold text-white">Setup Your Wallet</h2>
+            <p class="text-gray-300 mt-3 text-sm md:text-base">
+              Set up your wallet of choice. Connect it to the NFT Marketplace by
+              clicking the wallet icon in the top right corner.
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="card-hover bg-[#3b3b3b] rounded-2xl p-6 text-center">
+            <div class="flex justify-center mb-4">
+              <img
+                src="https://img.icons8.com/fluency/96/layers.png"
+                alt="Collection"
+                class="h-20 w-20"
+              />
+            </div>
+            <h2 class="text-xl font-bold text-white">Create Collection</h2>
+            <p class="text-gray-300 mt-3 text-sm md:text-base">
+              Upload your work and setup your collection. Add a description,
+              social links and floor price.
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="card-hover bg-[#3b3b3b] rounded-2xl p-6 text-center">
+            <div class="flex justify-center mb-4">
+              <img
+                src="https://img.icons8.com/fluency/96/coins.png"
+                alt="Earning"
+                class="h-20 w-20"
+              />
+            </div>
+            <h2 class="text-xl font-bold text-white">Start Earning</h2>
+            <p class="text-gray-300 mt-3 text-sm md:text-base">
+              Choose between auctions and fixed-price listings. Start earning by
+              selling your NFTs.
+            </p>
+          </div>
+
+          <!-- Step 4 (New) -->
+          <div class="card-hover bg-[#3b3b3b] rounded-2xl p-6 text-center">
+            <div class="flex justify-center mb-4">
+              <img
+                src="https://img.icons8.com/fluency/96/rocket.png"
+                alt="Community"
+                class="h-20 w-20"
+              />
+            </div>
+            <h2 class="text-xl font-bold text-white">Join The Community</h2>
+            <p class="text-gray-300 mt-3 text-sm md:text-base">
+              Connect with collectors and creators. Share your work,
+              collaborate, and grow your network.
+            </p>
+          </div>
+        </div>
+
+        <!-- Astronaut + Newsletter -->
+        <div class="grid lg:grid-cols-2 gap-8 mt-16">
+          <div class="rounded-2xl overflow-hidden">
+            <img
+              src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRnn-zNJh7dZzjCIPs5ZsHyCWZRLUDJV7iidC15PNfxQfeCLSDb"
+              alt="Astronaut"
+              class="w-full h-80 object-cover"
+            />
+          </div>
+
+          <div
+            class="flex flex-col justify-center bg-[#3b3b3b] rounded-2xl p-8"
+          >
+            <h2 class="text-2xl md:text-3xl font-bold text-white">
+              Join Our Weekly Digest
+            </h2>
+            <p class="text-gray-300 mt-3 text-sm md:text-base">
+              Get exclusive promotions & updates straight to your inbox.
+            </p>
+            <div
+              class="mt-6 flex flex-col sm:flex-row gap-3 bg-white rounded-xl"
+            >
+              <input
+                type="email"
+                placeholder="Enter Your Email Address"
+                class="px-4 py-3 rounded-full w-full text-black focus:outline-none"
+              />
+            </div>
+            <button
+              class="mt-2 bg-[#A259FF] text-white px-6 py-3 rounded-full font-semibold"
+            >
+              Subscribe
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
