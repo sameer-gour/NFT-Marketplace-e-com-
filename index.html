@@ -10,6 +10,39 @@
     />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
+      /* Theme Variables */
+      :root {
+        --bg-primary: #2b2b2b;
+        --bg-secondary: #3b3b3b;
+        --text-primary: #ffffff;
+        --text-secondary: #d1d5db;
+        --border-color: #4b5563;
+      }
+
+      .light-mode {
+        --bg-primary: #f3f4f6;
+        --bg-secondary: #ffffff;
+        --text-primary: #1f2937;
+        --text-secondary: #4b5563;
+        --border-color: #e5e7eb;
+      }
+
+      body {
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .bg-dark {
+        background-color: var(--bg-secondary);
+        transition: background-color 0.3s ease;
+      }
+
+      .text-light {
+        color: var(--text-secondary);
+        transition: color 0.3s ease;
+      }
+
       .card-hover {
         transition: all 0.3s ease;
       }
@@ -122,38 +155,130 @@
       .gradient-card:hover {
         background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
       }
+
+      .footer-bg {
+        background-color: var(--bg-secondary);
+        transition: background-color 0.3s ease;
+      }
+
+      /* Mobile Menu Styles */
+      .mobile-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        z-index: 1000;
+        transition: right 0.4s ease;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .mobile-menu.active {
+        right: 0;
+      }
+
+      .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.4s ease, visibility 0.4s ease;
+      }
+
+      .menu-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .menu-icon {
+        transition: transform 0.3s ease;
+      }
+
+      .menu-icon.active {
+        transform: rotate(90deg);
+      }
     </style>
   </head>
 
-  <body bgcolor="#2b2b2b" text="#ffffff">
+  <body>
     <!-- navigation -->
     <nav class="navigation py-4 px-4 md:px-8">
       <div class="container mx-auto flex justify-between items-center">
         <a
           href="#"
-          class="text-white text-lg md:text-xl font-bold flex items-center gap-2 md:gap-3 capitalize"
+          class="text-lg md:text-xl font-bold flex items-center gap-2 md:gap-3 capitalize"
+          style="color: var(--text-primary);"
         >
           <i class="ri-store-2-line text-[#A259FF] text-2xl md:text-3xl"></i>
           <h1>NFT Marketplace</h1>
         </a>
 
-        <div class="hidden md:flex space-x-6 lg:space-x-8">
-          <a href="#" class="nav-link text-gray-300 hover:text-white">Home</a>
-          <a href="#" class="nav-link text-gray-300 hover:text-white"
-            >Products</a
-          >
-          <a href="#" class="nav-link text-gray-300 hover:text-white"
-            >Rankings</a
-          >
-          <a href="#" class="nav-link text-gray-300 hover:text-white"
-            >Contact</a
-          >
+        <div class="hidden md:flex space-x-6 lg:space-x-8 items-center">
+          <a href="index.html" class="nav-link text-light">Home</a>
+          <a href="product.html" class="nav-link text-light">Products</a>
+          <a href="#" class="nav-link text-light">Rankings</a>
+          <a href="#" class="nav-link text-light">Contact</a>
+          
+          <!-- Theme Toggle Button -->
+          <button id="themeToggle" class="button-hover p-2 rounded-full bg-dark border-2 border-[#A259FF]" title="Toggle Theme">
+            <i class="ri-sun-line text-xl" id="themeIcon" style="color: var(--text-primary);"></i>
+          </button>
         </div>
-        <i
-          class="ri-menu-3-line md:hidden text-2xl hover:text-[#A259FF] cursor-pointer"
-        ></i>
+        
+        <div class="flex md:hidden items-center gap-3">
+          <!-- Mobile Theme Toggle -->
+          <button id="themeToggleMobile" class="p-2 rounded-full bg-dark border-2 border-[#A259FF]" title="Toggle Theme">
+            <i class="ri-sun-line text-xl" id="themeIconMobile" style="color: var(--text-primary);"></i>
+          </button>
+          <i id="menuToggle" class="menu-icon ri-menu-3-line text-2xl hover:text-[#A259FF] cursor-pointer" style="color: var(--text-primary);"></i>
+        </div>
       </div>
     </nav>
+
+    <!-- Menu Overlay -->
+    <div id="menuOverlay" class="menu-overlay"></div>
+
+    <!-- Mobile Sidebar Menu -->
+    <div id="mobileMenu" class="mobile-menu bg-dark">
+      <div class="flex flex-col h-full">
+        <!-- Menu Header -->
+        <div class="flex items-center justify-between p-4 border-b" style="border-color: var(--border-color);">
+          <div class="flex items-center gap-2">
+            <i class="ri-store-2-line text-[#A259FF] text-2xl"></i>
+            <h2 class="text-lg font-bold" style="color: var(--text-primary);">Menu</h2>
+          </div>
+          <i id="closeMenu" class="ri-close-line text-2xl cursor-pointer hover:text-[#A259FF]" style="color: var(--text-primary);"></i>
+        </div>
+
+        <!-- Menu Links -->
+        <div class="flex flex-col p-4 space-y-2">
+          <a href="index.html" class="nav-link text-light hover:text-[#A259FF] py-3 px-4 rounded-lg hover:bg-[#A259FF] hover:bg-opacity-10 transition-all">
+            <i class="ri-home-line mr-2"></i> Home
+          </a>
+          <a href="product.html" class="nav-link text-light hover:text-[#A259FF] py-3 px-4 rounded-lg hover:bg-[#A259FF] hover:bg-opacity-10 transition-all">
+            <i class="ri-shopping-bag-line mr-2"></i> Products
+          </a>
+          <a href="#" class="nav-link text-light hover:text-[#A259FF] py-3 px-4 rounded-lg hover:bg-[#A259FF] hover:bg-opacity-10 transition-all">
+            <i class="ri-bar-chart-line mr-2"></i> Rankings
+          </a>
+          <a href="#" class="nav-link text-light hover:text-[#A259FF] py-3 px-4 rounded-lg hover:bg-[#A259FF] hover:bg-opacity-10 transition-all">
+            <i class="ri-mail-line mr-2"></i> Contact
+          </a>
+        </div>
+
+        <!-- Menu Footer -->
+        <div class="mt-auto p-4 border-t" style="border-color: var(--border-color);">
+          <button class="w-full bg-[#A259FF] text-white py-3 px-6 rounded-full font-semibold hover:bg-opacity-90 transition-all">
+            🚀 Get Started
+          </button>
+        </div>
+      </div>
+    </div>
 
     <div class="main px-4 md:px-8 lg:px-16">
       <!-- Hero  -->
@@ -161,13 +286,14 @@
         <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <div class="order-2 lg:order-1">
             <h1
-              class="text-3xl md:text-4xl lg:text-6xl font-bold text-white leading-tight"
+              class="text-3xl md:text-4xl lg:text-6xl font-bold leading-tight"
+              style="color: var(--text-primary);"
             >
               Discover digital art & Collect NFTs
             </h1>
 
             <p
-              class="text-lg md:text-xl text-gray-300 mt-4 lg:mt-6 leading-relaxed"
+              class="text-lg md:text-xl mt-4 lg:mt-6 leading-relaxed text-light"
             >
               NFT marketplace UI created with Anima for Figma. Collect, buy and
               sell art from more than 20k NFT artists.
@@ -185,29 +311,29 @@
               class="stats flex justify-between md:justify-start md:gap-12 lg:gap-16 mt-8 lg:mt-12"
             >
               <div class="text-center md:text-left">
-                <h1 class="text-xl md:text-2xl lg:text-3xl font-bold">240k+</h1>
-                <p class="text-sm md:text-base text-gray-300">Total Sales</p>
+                <h1 class="text-xl md:text-2xl lg:text-3xl font-bold" style="color: var(--text-primary);">240k+</h1>
+                <p class="text-sm md:text-base text-light">Total Sales</p>
               </div>
               <div class="text-center md:text-left">
-                <h1 class="text-xl md:text-2xl lg:text-3xl font-bold">100k+</h1>
-                <p class="text-sm md:text-base text-gray-300">Auctions</p>
+                <h1 class="text-xl md:text-2xl lg:text-3xl font-bold" style="color: var(--text-primary);">100k+</h1>
+                <p class="text-sm md:text-base text-light">Auctions</p>
               </div>
               <div class="text-center md:text-left">
-                <h1 class="text-xl md:text-2xl lg:text-3xl font-bold">240k+</h1>
-                <p class="text-sm md:text-base text-gray-300">Artists</p>
+                <h1 class="text-xl md:text-2xl lg:text-3xl font-bold" style="color: var(--text-primary);">240k+</h1>
+                <p class="text-sm md:text-base text-light">Artists</p>
               </div>
             </div>
           </div>
 
           <div class="order-1 lg:order-2">
-            <div class="card-hover bg-[#3b3b3b] rounded-2xl overflow-hidden">
+            <div class="card-hover bg-dark rounded-2xl overflow-hidden">
               <img
                 class="w-full h-64 md:h-80 lg:h-96 object-cover"
                 src="https://nft-market-as3s.vercel.app/static/media/Image%20Placeholder.51fc41d14a4228b725cb.png"
                 alt="Space Walking NFT"
               />
               <div class="p-4 lg:p-6">
-                <h1 class="text-white text-xl lg:text-2xl font-bold">
+                <h1 class="text-xl lg:text-2xl font-bold" style="color: var(--text-primary);">
                   Space Walking
                 </h1>
                 <div class="flex items-center gap-3 mt-2">
@@ -216,7 +342,7 @@
                     src="https://pbs.twimg.com/profile_images/1953008536977391616/P3i3v36-_400x400.jpg"
                     alt="Animakid"
                   />
-                  <p class="text-gray-300">Animakid</p>
+                  <p class="text-light">Animakid</p>
                 </div>
               </div>
             </div>
@@ -227,17 +353,17 @@
       <!-- Trending Collection -->
       <div class="page2 max-w-6xl mx-auto mt-16 lg:mt-24">
         <div class="text-center lg:text-left">
-          <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+          <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold" style="color: var(--text-primary);">
             Trending Collection
           </h1>
-          <p class="text-lg md:text-xl text-gray-300 mt-4 tracking-wide">
+          <p class="text-lg md:text-xl mt-4 tracking-wide text-light">
             Checkout our weekly updated trending collection.
           </p>
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-8">
           <div
-            class="card-hover nft-card bg-[#3b3b3b] rounded-2xl overflow-hidden"
+            class="card-hover nft-card bg-dark rounded-2xl overflow-hidden"
           >
             <div class="p-4">
               <img
@@ -266,7 +392,7 @@
             </div>
 
             <div class="p-4">
-              <h1 class="text-white text-xl lg:text-2xl font-bold">
+              <h1 class="text-xl lg:text-2xl font-bold" style="color: var(--text-primary);">
                 DSGN Animals
               </h1>
               <div class="flex items-center gap-3 mt-2">
@@ -275,7 +401,7 @@
                   src="https://pbs.twimg.com/profile_images/1953008536977391616/P3i3v36-_400x400.jpg"
                   alt="MrFox"
                 />
-                <p class="text-gray-300">MrFox</p>
+                <p class="text-light">MrFox</p>
               </div>
             </div>
           </div>
@@ -286,18 +412,19 @@
       <div class="creators max-w-6xl mx-auto mt-16 lg:mt-24">
         <div class="text-center lg:text-left">
           <h1
-            class="text-3xl md:text-4xl lg:text-5xl font-bold text-white uppercase"
+            class="text-3xl md:text-4xl lg:text-5xl font-bold uppercase"
+            style="color: var(--text-primary);"
           >
             Top Creators
           </h1>
-          <p class="text-lg md:text-xl text-gray-300 mt-4 capitalize">
+          <p class="text-lg md:text-xl mt-4 capitalize text-light">
             Checkout Top Rated Creators on the NFT Marketplace
           </p>
         </div>
 
         <div class="grid md:grid-cols-2 gap-4 lg:gap-6 mt-8">
           <div
-            class="creator-card bg-[#3b3b3b] rounded-2xl flex gap-4 lg:gap-6 items-center p-4 lg:p-6"
+            class="creator-card bg-dark rounded-2xl flex gap-4 lg:gap-6 items-center p-4 lg:p-6"
           >
             <div
               class="h-16 w-16 lg:h-20 lg:w-20 rounded-full overflow-hidden flex-shrink-0"
@@ -309,16 +436,16 @@
               />
             </div>
             <div>
-              <h1 class="text-xl lg:text-2xl font-bold">Keepitreal</h1>
-              <p class="text-gray-300 text-sm lg:text-base">
+              <h1 class="text-xl lg:text-2xl font-bold" style="color: var(--text-primary);">Keepitreal</h1>
+              <p class="text-sm lg:text-base text-light">
                 Total Sales:
-                <span class="text-white font-semibold">34.53 ETH</span>
+                <span class="font-semibold" style="color: var(--text-primary);">34.53 ETH</span>
               </p>
             </div>
           </div>
 
           <div
-            class="creator-card bg-[#3b3b3b] rounded-2xl flex gap-4 lg:gap-6 items-center p-4 lg:p-6"
+            class="creator-card bg-dark rounded-2xl flex gap-4 lg:gap-6 items-center p-4 lg:p-6"
           >
             <div
               class="h-16 w-16 lg:h-20 lg:w-20 rounded-full overflow-hidden flex-shrink-0"
@@ -330,16 +457,16 @@
               />
             </div>
             <div>
-              <h1 class="text-xl lg:text-2xl font-bold">DigiLab</h1>
-              <p class="text-gray-300 text-sm lg:text-base">
+              <h1 class="text-xl lg:text-2xl font-bold" style="color: var(--text-primary);">DigiLab</h1>
+              <p class="text-sm lg:text-base text-light">
                 Total Sales:
-                <span class="text-white font-semibold">32.57 ETH</span>
+                <span class="font-semibold" style="color: var(--text-primary);">32.57 ETH</span>
               </p>
             </div>
           </div>
 
           <div
-            class="creator-card bg-[#3b3b3b] rounded-2xl flex gap-4 lg:gap-6 items-center p-4 lg:p-6"
+            class="creator-card bg-dark rounded-2xl flex gap-4 lg:gap-6 items-center p-4 lg:p-6"
           >
             <div
               class="h-16 w-16 lg:h-20 lg:w-20 rounded-full overflow-hidden flex-shrink-0"
@@ -351,16 +478,16 @@
               />
             </div>
             <div>
-              <h1 class="text-xl lg:text-2xl font-bold">GravityOne</h1>
-              <p class="text-gray-300 text-sm lg:text-base">
+              <h1 class="text-xl lg:text-2xl font-bold" style="color: var(--text-primary);">GravityOne</h1>
+              <p class="text-sm lg:text-base text-light">
                 Total Sales:
-                <span class="text-white font-semibold">29.90 ETH</span>
+                <span class="font-semibold" style="color: var(--text-primary);">29.90 ETH</span>
               </p>
             </div>
           </div>
 
           <div
-            class="creator-card bg-[#3b3b3b] rounded-2xl flex gap-4 lg:gap-6 items-center p-4 lg:p-6"
+            class="creator-card bg-dark rounded-2xl flex gap-4 lg:gap-6 items-center p-4 lg:p-6"
           >
             <div
               class="h-16 w-16 lg:h-20 lg:w-20 rounded-full overflow-hidden flex-shrink-0"
@@ -372,10 +499,10 @@
               />
             </div>
             <div>
-              <h1 class="text-xl lg:text-2xl font-bold">Juanie</h1>
-              <p class="text-gray-300 text-sm lg:text-base">
+              <h1 class="text-xl lg:text-2xl font-bold" style="color: var(--text-primary);">Juanie</h1>
+              <p class="text-sm lg:text-base text-light">
                 Total Sales:
-                <span class="text-white font-semibold">25.13 ETH</span>
+                <span class="font-semibold" style="color: var(--text-primary);">25.13 ETH</span>
               </p>
             </div>
           </div>
@@ -383,7 +510,8 @@
 
         <div class="mt-8">
           <button
-            class="button-hover border-2 border-[#A259FF] text-white py-3 px-8 rounded-full w-full md:w-auto text-lg font-semibold hover:bg-[#A259FF] transition-all"
+            class="button-hover border-2 border-[#A259FF] py-3 px-8 rounded-full w-full md:w-auto text-lg font-semibold hover:bg-[#A259FF] transition-all"
+            style="color: var(--text-primary);"
           >
             🚀 View Rankings
           </button>
@@ -394,7 +522,8 @@
       <div class="page3 max-w-6xl mx-auto mt-16 lg:mt-24">
         <div class="text-center lg:text-left">
           <h1
-            class="text-3xl md:text-4xl lg:text-5xl font-bold text-white uppercase"
+            class="text-3xl md:text-4xl lg:text-5xl font-bold uppercase"
+            style="color: var(--text-primary);"
           >
             Browse Categories
           </h1>
@@ -403,7 +532,7 @@
         <div
           class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6 mt-8"
         >
-          <div class="category-card bg-[#3b3b3b] rounded-2xl overflow-hidden">
+          <div class="category-card bg-dark rounded-2xl overflow-hidden">
             <div class="relative h-32 md:h-40 lg:h-48">
               <img
                 class="w-full h-full object-cover blur-sm transition-all duration-300"
@@ -411,17 +540,18 @@
                 alt="Art"
               />
               <i
-                class="ri-brush-ai-line text-white text-4xl lg:text-6xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                class="ri-brush-ai-line text-4xl lg:text-6xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                style="color: var(--text-primary);"
               ></i>
             </div>
             <div class="p-3 lg:p-4">
-              <h1 class="text-lg lg:text-xl font-bold text-white text-center">
+              <h1 class="text-lg lg:text-xl font-bold text-center" style="color: var(--text-primary);">
                 Art
               </h1>
             </div>
           </div>
 
-          <div class="category-card bg-[#3b3b3b] rounded-2xl overflow-hidden">
+          <div class="category-card bg-dark rounded-2xl overflow-hidden">
             <div class="relative h-32 md:h-40 lg:h-48">
               <img
                 class="w-full h-full object-cover blur-sm transition-all duration-300"
@@ -430,13 +560,13 @@
               />
             </div>
             <div class="p-3 lg:p-4">
-              <h1 class="text-lg lg:text-xl font-bold text-white text-center">
+              <h1 class="text-lg lg:text-xl font-bold text-center" style="color: var(--text-primary);">
                 Collectibles
               </h1>
             </div>
           </div>
 
-          <div class="category-card bg-[#3b3b3b] rounded-2xl overflow-hidden">
+          <div class="category-card bg-dark rounded-2xl overflow-hidden">
             <div class="relative h-32 md:h-40 lg:h-48">
               <img
                 class="w-full h-full object-cover blur-sm transition-all duration-300"
@@ -445,13 +575,13 @@
               />
             </div>
             <div class="p-3 lg:p-4">
-              <h1 class="text-lg lg:text-xl font-bold text-white text-center">
+              <h1 class="text-lg lg:text-xl font-bold text-center" style="color: var(--text-primary);">
                 Music
               </h1>
             </div>
           </div>
 
-          <div class="category-card bg-[#3b3b3b] rounded-2xl overflow-hidden">
+          <div class="category-card bg-dark rounded-2xl overflow-hidden">
             <div class="relative h-32 md:h-40 lg:h-48">
               <img
                 class="w-full h-full object-cover blur-sm transition-all duration-300"
@@ -460,13 +590,13 @@
               />
             </div>
             <div class="p-3 lg:p-4">
-              <h1 class="text-lg lg:text-xl font-bold text-white text-center">
+              <h1 class="text-lg lg:text-xl font-bold text-center" style="color: var(--text-primary);">
                 Photography
               </h1>
             </div>
           </div>
 
-          <div class="category-card bg-[#3b3b3b] rounded-2xl overflow-hidden">
+          <div class="category-card bg-dark rounded-2xl overflow-hidden">
             <div class="relative h-32 md:h-40 lg:h-48">
               <img
                 class="w-full h-full object-cover blur-sm transition-all duration-300"
@@ -475,13 +605,13 @@
               />
             </div>
             <div class="p-3 lg:p-4">
-              <h1 class="text-lg lg:text-xl font-bold text-white text-center">
+              <h1 class="text-lg lg:text-xl font-bold text-center" style="color: var(--text-primary);">
                 Video
               </h1>
             </div>
           </div>
 
-          <div class="category-card bg-[#3b3b3b] rounded-2xl overflow-hidden">
+          <div class="category-card bg-dark rounded-2xl overflow-hidden">
             <div class="relative h-32 md:h-40 lg:h-48">
               <img
                 class="w-full h-full object-cover blur-sm transition-all duration-300"
@@ -490,13 +620,13 @@
               />
             </div>
             <div class="p-3 lg:p-4">
-              <h1 class="text-lg lg:text-xl font-bold text-white text-center">
+              <h1 class="text-lg lg:text-xl font-bold text-center" style="color: var(--text-primary);">
                 Utility
               </h1>
             </div>
           </div>
 
-          <div class="category-card bg-[#3b3b3b] rounded-2xl overflow-hidden">
+          <div class="category-card bg-dark rounded-2xl overflow-hidden">
             <div class="relative h-32 md:h-40 lg:h-48">
               <img
                 class="w-full h-full object-cover blur-sm transition-all duration-300"
@@ -505,13 +635,13 @@
               />
             </div>
             <div class="p-3 lg:p-4">
-              <h1 class="text-lg lg:text-xl font-bold text-white text-center">
+              <h1 class="text-lg lg:text-xl font-bold text-center" style="color: var(--text-primary);">
                 Sport
               </h1>
             </div>
           </div>
 
-          <div class="category-card bg-[#3b3b3b] rounded-2xl overflow-hidden">
+          <div class="category-card bg-dark rounded-2xl overflow-hidden">
             <div class="relative h-32 md:h-40 lg:h-48">
               <img
                 class="w-full h-full object-cover blur-sm transition-all duration-300"
@@ -520,7 +650,7 @@
               />
             </div>
             <div class="p-3 lg:p-4">
-              <h1 class="text-lg lg:text-xl font-bold text-white text-center">
+              <h1 class="text-lg lg:text-xl font-bold text-center" style="color: var(--text-primary);">
                 Virtual Worlds
               </h1>
             </div>
@@ -532,18 +662,19 @@
       <div class="page4 max-w-6xl mx-auto mt-16 lg:mt-24">
         <div class="text-center lg:text-left">
           <h1
-            class="text-3xl md:text-4xl lg:text-5xl font-bold text-white uppercase"
+            class="text-3xl md:text-4xl lg:text-5xl font-bold uppercase"
+            style="color: var(--text-primary);"
           >
             Discover More NFTs
           </h1>
-          <p class="text-lg md:text-xl text-gray-300 mt-4 tracking-wide">
+          <p class="text-lg md:text-xl mt-4 tracking-wide text-light">
             Explore new trending NFTs
           </p>
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-8">
           <div
-            class="card-hover nft-card bg-[#3b3b3b] rounded-2xl overflow-hidden"
+            class="card-hover nft-card bg-dark rounded-2xl overflow-hidden"
           >
             <div class="p-4">
               <img
@@ -553,7 +684,7 @@
               />
             </div>
             <div class="p-4">
-              <h1 class="text-white text-xl lg:text-2xl font-bold">
+              <h1 class="text-xl lg:text-2xl font-bold" style="color: var(--text-primary);">
                 Distant Galaxy
               </h1>
               <div class="flex items-center gap-3 mt-2">
@@ -562,23 +693,23 @@
                   src="https://fitb-nft.netlify.app/assets/artist_mini_icon1.svg"
                   alt="Moon Dancer"
                 />
-                <p class="text-gray-300">Moon Dancer</p>
+                <p class="text-light">Moon Dancer</p>
               </div>
               <div class="flex justify-between mt-4">
                 <div>
-                  <h1 class="text-gray-300 text-sm">Price</h1>
-                  <p class="text-white font-bold">1.05 ETH</p>
+                  <h1 class="text-sm text-light">Price</h1>
+                  <p class="font-bold" style="color: var(--text-primary);">1.05 ETH</p>
                 </div>
                 <div>
-                  <h1 class="text-gray-300 text-sm">Highest Bid</h1>
-                  <p class="text-white font-bold">0.33 ETH</p>
+                  <h1 class="text-sm text-light">Highest Bid</h1>
+                  <p class="font-bold" style="color: var(--text-primary);">0.33 ETH</p>
                 </div>
               </div>
             </div>
           </div>
 
           <div
-            class="card-hover nft-card bg-[#3b3b3b] rounded-2xl overflow-hidden"
+            class="card-hover nft-card bg-dark rounded-2xl overflow-hidden"
           >
             <div class="p-4">
               <img
@@ -588,7 +719,7 @@
               />
             </div>
             <div class="p-4">
-              <h1 class="text-white text-xl lg:text-2xl font-bold">
+              <h1 class="text-xl lg:text-2xl font-bold" style="color: var(--text-primary);">
                 Life on Edena
               </h1>
               <div class="flex items-center gap-3 mt-2">
@@ -597,23 +728,23 @@
                   src="https://fitb-nft.netlify.app/assets/artist_mini_icon1.svg"
                   alt="NebulaKid"
                 />
-                <p class="text-gray-300">NebulaKid</p>
+                <p class="text-light">NebulaKid</p>
               </div>
               <div class="flex justify-between mt-4">
                 <div>
-                  <h1 class="text-gray-300 text-sm">Price</h1>
-                  <p class="text-white font-bold">1.05 ETH</p>
+                  <h1 class="text-sm text-light">Price</h1>
+                  <p class="font-bold" style="color: var(--text-primary);">1.05 ETH</p>
                 </div>
                 <div>
-                  <h1 class="text-gray-300 text-sm">Highest Bid</h1>
-                  <p class="text-white font-bold">0.33 ETH</p>
+                  <h1 class="text-sm text-light">Highest Bid</h1>
+                  <p class="font-bold" style="color: var(--text-primary);">0.33 ETH</p>
                 </div>
               </div>
             </div>
           </div>
 
           <div
-            class="card-hover nft-card bg-[#3b3b3b] rounded-2xl overflow-hidden"
+            class="card-hover nft-card bg-dark rounded-2xl overflow-hidden"
           >
             <div class="p-4">
               <img
@@ -623,7 +754,7 @@
               />
             </div>
             <div class="p-4">
-              <h1 class="text-white text-xl lg:text-2xl font-bold">
+              <h1 class="text-xl lg:text-2xl font-bold" style="color: var(--text-primary);">
                 AstroFiction
               </h1>
               <div class="flex items-center gap-3 mt-2">
@@ -632,16 +763,16 @@
                   src="https://fitb-nft.netlify.app/assets/artist_mini_icon1.svg"
                   alt="Spaceone"
                 />
-                <p class="text-gray-300">Spaceone</p>
+                <p class="text-light">Spaceone</p>
               </div>
               <div class="flex justify-between mt-4">
                 <div>
-                  <h1 class="text-gray-300 text-sm">Price</h1>
-                  <p class="text-white font-bold">1.05 ETH</p>
+                  <h1 class="text-sm text-light">Price</h1>
+                  <p class="font-bold" style="color: var(--text-primary);">1.05 ETH</p>
                 </div>
                 <div>
-                  <h1 class="text-gray-300 text-sm">Highest Bid</h1>
-                  <p class="text-white font-bold">0.33 ETH</p>
+                  <h1 class="text-sm text-light">Highest Bid</h1>
+                  <p class="font-bold" style="color: var(--text-primary);">0.33 ETH</p>
                 </div>
               </div>
             </div>
@@ -650,7 +781,8 @@
 
         <div class="mt-8 text-center">
           <button
-            class="button-hover border-2 border-[#A259FF] text-white py-3 px-8 rounded-full w-full md:w-auto text-lg font-semibold hover:bg-[#A259FF] transition-all"
+            class="button-hover border-2 border-[#A259FF] py-3 px-8 rounded-full w-full md:w-auto text-lg font-semibold hover:bg-[#A259FF] transition-all"
+            style="color: var(--text-primary);"
           >
             👁️ See All
           </button>
@@ -658,12 +790,12 @@
       </div>
 
       <!-- How It Works -->
-      <div class="page6 max-w-6xl mx-auto mt-16  mb-10 lg:mt-24">
+      <div class="page6 max-w-6xl mx-auto mt-16 mb-10 lg:mt-24">
         <div class="text-center lg:text-left mb-10">
-          <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+          <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold" style="color: var(--text-primary);">
             How It Works
           </h1>
-          <p class="text-lg md:text-xl text-gray-300 mt-3">
+          <p class="text-lg md:text-xl mt-3 text-light">
             Find out how to get started
           </p>
         </div>
@@ -671,7 +803,7 @@
         <!-- Steps -->
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           <!-- Step 1 -->
-          <div class="card-hover bg-[#3b3b3b] rounded-2xl p-6 text-center">
+          <div class="card-hover bg-dark rounded-2xl p-6 text-center">
             <div class="flex justify-center mb-4">
               <img
                 src="https://img.icons8.com/fluency/96/wallet.png"
@@ -679,15 +811,15 @@
                 class="h-20 w-20"
               />
             </div>
-            <h2 class="text-xl font-bold text-white">Setup Your Wallet</h2>
-            <p class="text-gray-300 mt-3 text-sm md:text-base">
+            <h2 class="text-xl font-bold" style="color: var(--text-primary);">Setup Your Wallet</h2>
+            <p class="mt-3 text-sm md:text-base text-light">
               Set up your wallet of choice. Connect it to the NFT Marketplace by
               clicking the wallet icon in the top right corner.
             </p>
           </div>
 
           <!-- Step 2 -->
-          <div class="card-hover bg-[#3b3b3b] rounded-2xl p-6 text-center">
+          <div class="card-hover bg-dark rounded-2xl p-6 text-center">
             <div class="flex justify-center mb-4">
               <img
                 src="https://img.icons8.com/fluency/96/layers.png"
@@ -695,15 +827,15 @@
                 class="h-20 w-20"
               />
             </div>
-            <h2 class="text-xl font-bold text-white">Create Collection</h2>
-            <p class="text-gray-300 mt-3 text-sm md:text-base">
+            <h2 class="text-xl font-bold" style="color: var(--text-primary);">Create Collection</h2>
+            <p class="mt-3 text-sm md:text-base text-light">
               Upload your work and setup your collection. Add a description,
               social links and floor price.
             </p>
           </div>
 
           <!-- Step 3 -->
-          <div class="card-hover bg-[#3b3b3b] rounded-2xl p-6 text-center">
+          <div class="card-hover bg-dark rounded-2xl p-6 text-center">
             <div class="flex justify-center mb-4">
               <img
                 src="https://img.icons8.com/fluency/96/coins.png"
@@ -711,15 +843,15 @@
                 class="h-20 w-20"
               />
             </div>
-            <h2 class="text-xl font-bold text-white">Start Earning</h2>
-            <p class="text-gray-300 mt-3 text-sm md:text-base">
+            <h2 class="text-xl font-bold" style="color: var(--text-primary);">Start Earning</h2>
+            <p class="mt-3 text-sm md:text-base text-light">
               Choose between auctions and fixed-price listings. Start earning by
               selling your NFTs.
             </p>
           </div>
 
-          <!-- Step 4 (New) -->
-          <div class="card-hover bg-[#3b3b3b] rounded-2xl p-6 text-center">
+          <!-- Step 4 -->
+          <div class="card-hover bg-dark rounded-2xl p-6 text-center">
             <div class="flex justify-center mb-4">
               <img
                 src="https://img.icons8.com/fluency/96/rocket.png"
@@ -727,106 +859,98 @@
                 class="h-20 w-20"
               />
             </div>
-            <h2 class="text-xl font-bold text-white">Join The Community</h2>
-            <p class="text-gray-300 mt-3 text-sm md:text-base">
+            <h2 class="text-xl font-bold" style="color: var(--text-primary);">Join The Community</h2>
+            <p class="mt-3 text-sm md:text-base text-light">
               Connect with collectors and creators. Share your work,
               collaborate, and grow your network.
             </p>
           </div>
         </div>
 
-        <div class="bg-[#3b3b3b] mt-16 rounded-xl p-2">
-
-        <!-- Astronaut + Newsletter -->
-        <div class="grid lg:grid-cols-2 ">
-          <div class="rounded-md overflow-hidden">
-            <img 
-              src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRnn-zNJh7dZzjCIPs5ZsHyCWZRLUDJV7iidC15PNfxQfeCLSDb"
-              alt="Astronaut"
-              class="w-full h-80 object-cover"
-            />
-          </div>
-
-          <div
-            class="flex flex-col justify-center  rounded-md  p-8"
-          >
-            <h2 class="text-2xl md:text-3xl font-bold text-white">
-              Join Our Weekly Digest
-            </h2>
-            <p class="text-gray-300 mt-3 text-sm md:text-base">
-              Get exclusive promotions & updates straight to your inbox.
-            </p>
-            <div
-              class="mt-6 flex flex-col sm:flex-row gap-3 bg-white rounded-xl"
-            >
-              <input
-                type="email"
-                placeholder="Enter Your Email Address"
-                class="px-4 py-3 rounded-full w-full text-black focus:outline-none"
+        <div class="bg-dark mt-16 rounded-xl p-2">
+          <!-- Astronaut + Newsletter -->
+          <div class="grid lg:grid-cols-2">
+            <div class="rounded-md overflow-hidden">
+              <img 
+                src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRnn-zNJh7dZzjCIPs5ZsHyCWZRLUDJV7iidC15PNfxQfeCLSDb"
+                alt="Astronaut"
+                class="w-full h-80 object-cover"
               />
             </div>
-            <button
-              class="mt-2 bg-[#A259FF] text-white px-6 py-3 rounded-full font-semibold"
-            >
-              Subscribe
-            </button>
+
+            <div class="flex flex-col justify-center rounded-md p-8">
+              <h2 class="text-2xl md:text-3xl font-bold" style="color: var(--text-primary);">
+                Join Our Weekly Digest
+              </h2>
+              <p class="mt-3 text-sm md:text-base text-light">
+                Get exclusive promotions & updates straight to your inbox.
+              </p>
+              <div class="mt-6 flex flex-col sm:flex-row gap-3 bg-white rounded-xl">
+                <input
+                  type="email"
+                  placeholder="Enter Your Email Address"
+                  class="px-4 py-3 rounded-full w-full text-black focus:outline-none"
+                />
+              </div>
+              <button
+                class="mt-2 bg-[#A259FF] text-white px-6 py-3 rounded-full font-semibold"
+              >
+                Subscribe
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="px-4 md:px-8 lg:px-16 footer-bg text-light">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 p-5">
+        <!-- Left Section -->
+        <div>
+          <h2 class="flex items-center gap-2 text-lg font-bold" style="color: var(--text-primary);">
+            <span class="text-purple-500">🏰</span> NFT Marketplace
+          </h2>
+          <p class="mt-2 text-sm">NFT marketplace UI created with Anima for Figma.</p>
+          <p class="mt-2 text-sm">Join our community</p>
+          <div class="flex gap-4 mt-4">
+            <a href="#" class="hover:text-purple-400 transition"><i class="ri-gamepad-line text-xl"></i></a>
+            <a href="#" class="hover:text-purple-400 transition"><i class="ri-youtube-line text-xl"></i></a>
+            <a href="#" class="hover:text-purple-400 transition"><i class="ri-twitter-line text-xl"></i></a>
+            <a href="#" class="hover:text-purple-400 transition"><i class="ri-instagram-line text-xl"></i></a>
           </div>
         </div>
 
+        <!-- Middle Section -->
+        <div>
+          <h3 class="text-lg font-semibold" style="color: var(--text-primary);">Explore</h3>
+          <ul class="mt-4 space-y-2">
+            <li><a href="#" class="hover:text-purple-400 transition">Marketplace</a></li>
+            <li><a href="#" class="hover:text-purple-400 transition">Rankings</a></li>
+            <li><a href="#" class="hover:text-purple-400 transition">Connect a wallet</a></li>
+          </ul>
+        </div>
+
+        <!-- Right Section -->
+        <div>
+          <h3 class="text-lg font-semibold" style="color: var(--text-primary);">Join Our Weekly Digest</h3>
+          <p class="mt-2 text-sm">Get exclusive promotions & updates straight to your inbox.</p>
+          <form class="mt-4 flex">
+            <input type="email" placeholder="Enter your email here"
+              class="w-full px-3 py-2 rounded-l-lg bg-dark text-light placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500">
+            <button type="submit"
+              class="px-5 py-2 rounded-r-lg bg-purple-500 hover:bg-purple-600 transition text-white font-medium">
+              Subscribe
+            </button>
+          </form>
         </div>
       </div>
 
-      
-    </div>
+      <hr class="my-6 border-gray-700">
+      <p class="text-center text-xs pb-4" style="color: var(--text-secondary);">© NFT Market. Use this template freely.</p>
+    </footer>
 
-     <!-- Footer Section -->
-  <footer class=" px-4 md:px-8 lg:px-16 bg-gray-900 text-gray-300 ">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 p-5">
-
-      <!-- Left Section -->
-      <div>
-        <h2 class="flex items-center gap-2 text-lg font-bold text-white">
-          <span class="text-purple-500">🏰</span> NFT Marketplace
-        </h2>
-        <p class="mt-2 text-sm">NFT marketplace UI created with Anima for Figma.</p>
-        <p class="mt-2 text-sm">Join our community</p>
-        <div class="flex gap-4 mt-4 text-gray-400">
-          <a href="#" class="hover:text-purple-400 transition"><i class="ri-gamepad-line text-xl"></i></a>
-          <a href="#" class="hover:text-purple-400 transition"><i class="ri-youtube-line text-xl"></i></a>
-          <a href="#" class="hover:text-purple-400 transition"><i class="ri-twitter-line text-xl"></i></a>
-          <a href="#" class="hover:text-purple-400 transition"><i class="ri-instagram-line text-xl"></i></a>
-        </div>
-      </div>
-
-      <!-- Middle Section -->
-      <div>
-        <h3 class="text-lg font-semibold text-white">Explore</h3>
-        <ul class="mt-4 space-y-2">
-          <li><a href="#" class="hover:text-purple-400 transition">Marketplace</a></li>
-          <li><a href="#" class="hover:text-purple-400 transition">Rankings</a></li>
-          <li><a href="#" class="hover:text-purple-400 transition">Connect a wallet</a></li>
-        </ul>
-      </div>
-
-      <!-- Right Section -->
-      <div>
-        <h3 class="text-lg font-semibold text-white">Join Our Weekly Digest</h3>
-        <p class="mt-2 text-sm">Get exclusive promotions & updates straight to your inbox.</p>
-        <form class="mt-4 flex">
-          <input type="email" placeholder="Enter your email here"
-            class="w-full px-3 py-2 rounded-l-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500">
-          <button type="submit"
-            class="px-5 py-2 rounded-r-lg bg-purple-500 hover:bg-purple-600 transition text-white font-medium">
-            Subscribe
-          </button>
-        </form>
-      </div>
-    </div>
-
-    <hr class="my-6 border-gray-700">
-    <p class="text-center text-xs text-gray-500">© NFT Market. Use this template freely.</p>
-  </footer>
-
-  <script src="script.js"></script>
+    
   </body>
+  <script src="script.js"></script>
 </html>
