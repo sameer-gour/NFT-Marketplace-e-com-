@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NFT Marketplace</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+      /* Theme Variables */
+      :root {
+        --bg-primary: #2b2b2b;
+        --bg-secondary: #3b3b3b;
+        --text-primary: #ffffff;
+        --text-secondary: #d1d5db;
+        --border-color: #4b5563;
+      }
+
+      .light-mode {
+        --bg-primary: #f3f4f6;
+        --bg-secondary: #ffffff;
+        --text-primary: #1f2937;
+        --text-secondary: #4b5563;
+        --border-color: #e5e7eb;
+      }
+
+      body {
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .bg-dark {
+        background-color: var(--bg-secondary);
+        transition: background-color 0.3s ease;
+      }
+
+      .text-light {
+        color: var(--text-secondary);
+        transition: color 0.3s ease;
+      }
+
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+
+      .card-hover:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(162, 89, 255, 0.3);
+      }
+
+      .button-hover {
+        transition: all 0.3s ease;
+      }
+
+      .button-hover:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 30px rgba(162, 89, 255, 0.4);
+      }
+
+      .nav-link {
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 50%;
+        background-color: #a259ff;
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      .category-card {
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .category-card:hover {
+        transform: scale(1.03);
+      }
+
+      .category-card:hover img {
+        transform: scale(1.1);
+        filter: blur(1px);
+      }
+
+      .creator-card {
+        transition: all 0.3s ease;
+      }
+
+      .creator-card:hover {
+        transform: translateX(10px);
+        border-left: 4px solid #a259ff;
+      }
+
+      .nft-card {
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .nft-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(162, 89, 255, 0.2),
+          transparent
+        );
+        transition: left 0.6s;
+      }
+
+      .nft-card:hover::before {
+        left: 100%;
+      }
+
+      .auction-timer {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      .gradient-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        transition: all 0.5s ease;
+      }
+
+      .gradient-card:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+      }
+
+      .footer-bg {
+        background-color: var(--bg-secondary);
+        transition: background-color 0.3s ease;
+      }
+
+      /* Mobile Menu Styles */
+      .mobile-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        z-index: 1000;
+        transition: right 0.4s ease;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .mobile-menu.active {
+        right: 0;
+      }
+
+      .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.4s ease, visibility 0.4s ease;
+      }
+
+      .menu-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .menu-icon {
+        transition: transform 0.3s ease;
+      }
+
+      .menu-icon.active {
+        transform: rotate(90deg);
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- navigation -->
+    <nav class="navigation py-4 px-4 md:px-8">
+      <div class="container mx-auto flex justify-between items-center">
+        <a
+          href="#"
+          class="text-lg md:text-xl font-bold flex items-center gap-2 md:gap-3 capitalize"
+          style="color: var(--text-primary);"
+        >
+          <i class="ri-store-2-line text-[#A259FF] text-2xl md:text-3xl"></i>
+          <h1>NFT Marketplace</h1>
+        </a>
+
+        <div class="hidden md:flex space-x-6 lg:space-x-8 items-center">
+          <a href="index.html" class="nav-link text-light">Home</a>
+          <a href="product.html" class="nav-link text-light">Products</a>
+          <a href="#" class="nav-link text-light">Rankings</a>
+          <a href="Contate.html" class="nav-link text-light">Contact</a>
+          
+          <!-- Theme Toggle Button -->
+          <button id="themeToggle" class="button-hover p-2 rounded-full bg-dark border-2 border-[#A259FF]" title="Toggle Theme">
+            <i class="ri-sun-line text-xl" id="themeIcon" style="color: var(--text-primary);"></i>
+          </button>
+        </div>
+        
+        <div class="flex md:hidden items-center gap-3">
+          <!-- Mobile Theme Toggle -->
+          <button id="themeToggleMobile" class="p-2 rounded-full bg-dark border-2 border-[#A259FF]" title="Toggle Theme">
+            <i class="ri-sun-line text-xl" id="themeIconMobile" style="color: var(--text-primary);"></i>
+          </button>
+          <i id="menuToggle" class="menu-icon ri-menu-3-line text-2xl hover:text-[#A259FF] cursor-pointer" style="color: var(--text-primary);"></i>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Menu Overlay -->
+    <div id="menuOverlay" class="menu-overlay"></div>
+
+    <!-- Mobile Sidebar Menu -->
+    <div id="mobileMenu" class="mobile-menu bg-dark">
+      <div class="flex flex-col h-full">
+        <!-- Menu Header -->
+        <div class="flex items-center justify-between p-4 border-b" style="border-color: var(--border-color);">
+          <div class="flex items-center gap-2">
+            <i class="ri-store-2-line text-[#A259FF] text-2xl"></i>
+            <h2 class="text-lg font-bold" style="color: var(--text-primary);">Menu</h2>
+          </div>
+          <i id="closeMenu" class="ri-close-line text-2xl cursor-pointer hover:text-[#A259FF]" style="color: var(--text-primary);"></i>
+        </div>
+
+        <!-- Menu Links -->
+        <div class="flex flex-col p-4 space-y-2">
+          <a href="index.html" class="nav-link text-light hover:text-[#A259FF] py-3 px-4 rounded-lg hover:bg-[#A259FF] hover:bg-opacity-10 transition-all">
+            <i class="ri-home-line mr-2"></i> Home
+          </a>
+          <a href="product.html" class="nav-link text-light hover:text-[#A259FF] py-3 px-4 rounded-lg hover:bg-[#A259FF] hover:bg-opacity-10 transition-all">
+            <i class="ri-shopping-bag-line mr-2"></i> Products
+          </a>
+          <a href="#" class="nav-link text-light hover:text-[#A259FF] py-3 px-4 rounded-lg hover:bg-[#A259FF] hover:bg-opacity-10 transition-all">
+            <i class="ri-bar-chart-line mr-2"></i> Rankings
+          </a>
+          <a href="Contate.html" class="nav-link text-light hover:text-[#A259FF] py-3 px-4 rounded-lg hover:bg-[#A259FF] hover:bg-opacity-10 transition-all">
+            <i class="ri-mail-line mr-2"></i> Contact
+          </a>
+        </div>
+
+        <!-- Menu Footer -->
+        <div class="mt-auto p-4 border-t" style="border-color: var(--border-color);">
+          <button class="w-full bg-[#A259FF] text-white py-3 px-6 rounded-full font-semibold hover:bg-opacity-90 transition-all">
+            🚀 Get Started
+          </button>
+        </div>
+      </div>
+    </div>
+
+<!-- Contact Section -->
+<section id="contact" class="py-20 px-6" style="background-color: var(--bg-primary); color: var(--text-primary);">
+  <div class="max-w-3xl mx-auto text-center">
+    <h2 class="text-4xl font-bold mb-4" style="color: var(--text-primary);">Get in Touch</h2>
+    <p class="mb-10" style="color: var(--text-secondary);">
+      Have questions about our NFT Marketplace? Fill out the form below and we’ll reply shortly.
+    </p>
+  </div>
+
+  <form class="max-w-3xl mx-auto p-8 rounded-2xl shadow-xl space-y-6"
+        style="background-color: var(--bg-secondary); border: 1px solid var(--border-color);">
+    
+    <!-- Name -->
+    <div>
+      <label for="name" class="block text-left text-sm font-medium mb-2" style="color: var(--text-primary);">Your Name</label>
+      <input type="text" id="name" name="name" placeholder="Enter your name"
+        class="w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#A259FF]"
+        style="background-color: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border-color);" required>
+    </div>
+
+    <!-- Email -->
+    <div>
+      <label for="email" class="block text-left text-sm font-medium mb-2" style="color: var(--text-primary);">Your Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email"
+        class="w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#A259FF]"
+        style="background-color: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border-color);" required>
+    </div>
+
+    <!-- Subject -->
+    <div>
+      <label for="subject" class="block text-left text-sm font-medium mb-2" style="color: var(--text-primary);">Subject</label>
+      <input type="text" id="subject" name="subject" placeholder="Enter subject"
+        class="w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#A259FF]"
+        style="background-color: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border-color);" required>
+    </div>
+
+    <!-- Message -->
+    <div>
+      <label for="message" class="block text-left text-sm font-medium mb-2" style="color: var(--text-primary);">Message</label>
+      <textarea id="message" name="message" rows="5" placeholder="Write your message here..."
+        class="w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#A259FF]"
+        style="background-color: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border-color);" required></textarea>
+    </div>
+
+    <!-- Button -->
+    <button type="submit"
+      class="w-full bg-[#A259FF] hover:bg-purple-700 transition-colors py-3 px-6 rounded-lg font-semibold shadow-lg button-hover">
+      Send Message
+    </button>
+  </form>
+</section>
+
+
+
+    <!-- Footer Section -->
+    <footer class="px-4 md:px-8 lg:px-16 footer-bg text-light">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 p-5">
+        <!-- Left Section -->
+        <div>
+          <h2 class="flex items-center gap-2 text-lg font-bold" style="color: var(--text-primary);">
+            <span class="text-purple-500">🏰</span> NFT Marketplace
+          </h2>
+          <p class="mt-2 text-sm">NFT marketplace UI created with Anima for Figma.</p>
+          <p class="mt-2 text-sm">Join our community</p>
+          <div class="flex gap-4 mt-4">
+            <a href="#" class="hover:text-purple-400 transition"><i class="ri-gamepad-line text-xl"></i></a>
+            <a href="#" class="hover:text-purple-400 transition"><i class="ri-youtube-line text-xl"></i></a>
+            <a href="#" class="hover:text-purple-400 transition"><i class="ri-twitter-line text-xl"></i></a>
+            <a href="#" class="hover:text-purple-400 transition"><i class="ri-instagram-line text-xl"></i></a>
+          </div>
+        </div>
+
+        <!-- Middle Section -->
+        <div>
+          <h3 class="text-lg font-semibold" style="color: var(--text-primary);">Explore</h3>
+          <ul class="mt-4 space-y-2">
+            <li><a href="#" class="hover:text-purple-400 transition">Marketplace</a></li>
+            <li><a href="#" class="hover:text-purple-400 transition">Rankings</a></li>
+            <li><a href="#" class="hover:text-purple-400 transition">Connect a wallet</a></li>
+          </ul>
+        </div>
+
+        <!-- Right Section -->
+        <div>
+          <h3 class="text-lg font-semibold" style="color: var(--text-primary);">Join Our Weekly Digest</h3>
+          <p class="mt-2 text-sm">Get exclusive promotions & updates straight to your inbox.</p>
+          <form class="mt-4 flex">
+            <input type="email" placeholder="Enter your email here"
+              class="w-full px-3 py-2 rounded-l-lg bg-dark text-light placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500">
+            <button type="submit"
+              class="px-5 py-2 rounded-r-lg bg-purple-500 hover:bg-purple-600 transition text-white font-medium">
+              Subscribe
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <hr class="my-6 border-gray-700">
+      <p class="text-center text-xs pb-4" style="color: var(--text-secondary);">© NFT Market. Use this template freely.</p>
+    </footer>
+    <script src="script.js"></script>
